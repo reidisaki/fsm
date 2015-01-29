@@ -10,6 +10,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,21 +30,23 @@ public class IGdataAdapter extends ArrayAdapter<InstagramData> {
 		this.layoutResourceId = igRowId;
 		this.mContext = context;
 		this.data = objects;
-
+		Log.i("reid",objects.size() +" size");
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		InstagramData currentData = data.get(position) ;
 		if(convertView == null) {
 			//inflate the view
-			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+			LayoutInflater inflater = LayoutInflater.from(mContext);
 			convertView = inflater.inflate(layoutResourceId, parent, false);
 		} 
 
 		if(data.size() > 0 ) {
 			ImageView image = (ImageView)convertView.findViewById(R.id.ig_image);
 			TextView text = (TextView)convertView.findViewById(R.id.ig_text);
+			Log.i("reid",currentData.get_fullName());
 			text.setText(currentData.get_fullName());
+			Log.i("reid",currentData.get_standardImage());
 			image.setTag(currentData.get_standardImage());
 			new DownloadImagesTask().execute(image);
 		}

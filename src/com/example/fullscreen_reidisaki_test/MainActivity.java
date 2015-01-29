@@ -13,45 +13,51 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.app.Fragment;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 import com.example.fullscreen_reidisaki_test.api.API;
 import com.example.fullscreen_reidisaki_test.data.IGdataAdapter;
 import com.example.fullscreen_reidisaki_test.data.InstagramData;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends ListActivity{
 	public IGdataAdapter adapter;
 	ProgressDialog dialog;
+	ListView list;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		dialog = new ProgressDialog(getApplicationContext());
-
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
-
+		dialog = new ProgressDialog(this);
+		AdView 	adView = (AdView)findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder()
+		.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+		.addTestDevice("deviceid")
+		.build();
+		adView.loadAd(adRequest); 
+		
+		new LoadInstagramFeedTask().execute("");
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				String url = adapter.getItem(position).get_videoUrl();
+				
 				if(url != null) {
+					Log.i("reid",url);
 					//go to video playing page.. otherwise there is no video.
 					Intent i = new Intent(MainActivity.this,Player.class);
 					i.putExtra(Player.VIDEO_URL,url);
@@ -81,30 +87,15 @@ public class MainActivity extends ListActivity{
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-			return rootView;
-		}
-	}
 
 	public class LoadInstagramFeedTask extends
-			AsyncTask<String, Integer, List<InstagramData>> {
+	AsyncTask<String, Integer, List<InstagramData>> {
 
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			dialog.setTitle("Retrieving Instagram data feed");
+			dialog.setTitle("Please wait..");
+			dialog.setMessage("Retrieving Instagram data");
 			dialog.show();
 		}
 		@Override
@@ -117,12 +108,11 @@ public class MainActivity extends ListActivity{
 		protected void onPostExecute(List<InstagramData> result) {
 			dialog.hide();
 			super.onPostExecute(result);
-			if(adapter != null) {
-				adapter = new IGdataAdapter(getApplicationContext(), R.layout.ig_row, result);
-				setListAdapter(adapter);
-				//update list
-				adapter.notifyDataSetChanged();
-			}
+			Log.i("reid","successfully gotten data and adapter");
+			adapter = new IGdataAdapter(getApplicationContext(), R.layout.ig_row, result);
+			setListAdapter(adapter);
+			//update list
+			adapter.notifyDataSetChanged();
 
 		}
 

@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.example.fullscreen_reidisaki_test.data.InstagramData;
 
 public class API {
@@ -20,9 +22,12 @@ public class API {
 	final static String NODE_OWNER_NAME = "username";
 	final static String NODE_USER = "user";
 	final static String NODE_PROFILE_IMAGE = "profile_picture";
-	final static String NODE_VIDEO_URL = "standard_resolution";
-	final static String NODE_VIDEO = "video";
+	final static String NODE_VIDEO_URL = "url";
+	final static String NODE_VIDEO = "videos";
 	final static String NODE_FULL_NAME= "full_name";
+	final static String NODE_IMAGE_URL = "url";
+	final static String NODE_VIDEO_STANDARD = "standard_resolution";
+	
 
 
 	public static List<InstagramData> parseData(String JSONString){
@@ -30,29 +35,37 @@ public class API {
 		try {
 
 			JSONObject result = new JSONObject(JSONString);
-			JSONArray data = new JSONArray(result.get(NODE_DATA));
+			JSONArray data = new JSONArray(result.get(NODE_DATA).toString());
 			for(int  i =0; i < data.length(); i++) {
 				JSONObject item = (JSONObject) data.get(i);
 				JSONObject user = item.getJSONObject(NODE_USER);
-				JSONObject videos = item.getJSONObject(NODE_VIDEO);
+				JSONObject videos = null;
 				JSONObject images = item.getJSONObject(NODE_IMAGES);
+				JSONObject image = images.getJSONObject(NODE_STANDARD_IMAGE);
+				
+				if(item.has(NODE_VIDEO)) {
+					videos = item.getJSONObject(NODE_VIDEO);
+				} 
+				
 
 				InstagramData igData = new InstagramData();
 				igData.set_created_time(item.getString(NODE_CREATED_TIME));
 				igData.set_fullName(user.getString(NODE_FULL_NAME));
 				igData.set_ownerName(user.getString(NODE_OWNER_NAME));
 				igData.set_ownerPicture(user.getString(NODE_PROFILE_IMAGE));
-
-				igData.set_standardImage(images.getString(NODE_STANDARD_IMAGE));
-				igData.set_thumbnailImage(images.getString(NODE_THUMBNAIL));
+				
+				igData.set_standardImage(image.getString(NODE_IMAGE_URL));
+				image = images.getJSONObject(NODE_THUMBNAIL);
+				igData.set_thumbnailImage(image.getString(NODE_IMAGE_URL));
 				if(videos != null) {
-					igData.set_videoUrl(videos.getString(NODE_VIDEO_URL));
+					JSONObject video = videos.getJSONObject(NODE_VIDEO_STANDARD);
+					igData.set_videoUrl(video.getString(NODE_VIDEO_URL));
+					Log.i("reid","video url: " + igData.get_videoUrl());
 				}
 				instagramDataList.add(igData);
 			}
 
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
