@@ -15,6 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Fragment;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,11 +32,12 @@ import com.example.fullscreen_reidisaki_test.data.InstagramData;
 
 public class MainActivity extends ListActivity{
 	public IGdataAdapter adapter;
-	
+	ProgressDialog dialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		dialog = new ProgressDialog(getApplicationContext());
 
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
@@ -95,6 +97,12 @@ public class MainActivity extends ListActivity{
 			AsyncTask<String, Integer, List<InstagramData>> {
 
 		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			dialog.setTitle("Retrieving Instagram data feed");
+			dialog.show();
+		}
+		@Override
 		protected List<InstagramData> doInBackground(String... params) {
 			return connect(getResources().getString(R.string.instagram_feed)
 					+ getResources().getString(R.string.instagram_client_id));
@@ -102,6 +110,7 @@ public class MainActivity extends ListActivity{
 
 		@Override
 		protected void onPostExecute(List<InstagramData> result) {
+			dialog.hide();
 			super.onPostExecute(result);
 			if(adapter != null) {
 				adapter = new IGdataAdapter(getApplicationContext(), R.layout.ig_row, result);
