@@ -4,5 +4,6 @@
     <string name="app_name">fullscreen-reidisaki-test</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="instagram_feed">https://api.instagram.com/v1/media/popular?client_id=</string>
+	<string name="instagram_client_id">45725c0fb26b4d2c9c53c129ba9e70c6</string>
 </resources>
