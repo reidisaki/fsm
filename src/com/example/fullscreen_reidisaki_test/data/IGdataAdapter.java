@@ -33,6 +33,7 @@ public class IGdataAdapter extends ArrayAdapter<InstagramData> {
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		InstagramData currentData = data.get(position) ;
 		if(convertView == null) {
 			//inflate the view
 			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
@@ -42,8 +43,8 @@ public class IGdataAdapter extends ArrayAdapter<InstagramData> {
 		if(data.size() > 0 ) {
 			ImageView image = (ImageView)convertView.findViewById(R.id.ig_image);
 			TextView text = (TextView)convertView.findViewById(R.id.ig_text);
-			text.setText(data.get(position).get_fullName());
-			image.setTag(data.get(position).get_standardImage());
+			text.setText(currentData.get_fullName());
+			image.setTag(currentData.get_standardImage());
 			new DownloadImagesTask().execute(image);
 		}
 		

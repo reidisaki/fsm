@@ -13,23 +13,23 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.fullscreen_reidisaki_test.api.API;
 import com.example.fullscreen_reidisaki_test.data.IGdataAdapter;
 import com.example.fullscreen_reidisaki_test.data.InstagramData;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends ListActivity{
 	public IGdataAdapter adapter;
 	
 	@Override
@@ -41,6 +41,17 @@ public class MainActivity extends ListActivity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+
+		getListView().setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if(adapter.getItem(position).get_videoUrl() != null) {
+					//go to video playing page.. otherwise there is no video.
+				}
+			}
+		});
 	}
 
 	@Override
