@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.app.Fragment;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -49,8 +50,12 @@ public class MainActivity extends ListActivity{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if(adapter.getItem(position).get_videoUrl() != null) {
+				String url = adapter.getItem(position).get_videoUrl();
+				if(url != null) {
 					//go to video playing page.. otherwise there is no video.
+					Intent i = new Intent(MainActivity.this,Player.class);
+					i.putExtra(Player.VIDEO_URL,url);
+					startActivity(i);
 				}
 			}
 		});
