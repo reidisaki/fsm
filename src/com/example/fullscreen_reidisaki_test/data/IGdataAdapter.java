@@ -34,21 +34,28 @@ public class IGdataAdapter extends ArrayAdapter<InstagramData> {
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		InstagramData currentData = data.get(position) ;
+		InstagramData currentData = data.get(position);
+
 		if(convertView == null) {
 			//inflate the view
 			LayoutInflater inflater = LayoutInflater.from(mContext);
 			convertView = inflater.inflate(layoutResourceId, parent, false);
-		} 
-
+		}
+		convertView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
+		if(currentData.get_videoUrl() != null) {
+			convertView.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_green_dark));
+		}
 		if(data.size() > 0 ) {
 			ImageView image = (ImageView)convertView.findViewById(R.id.ig_image);
+			ImageView thumb = (ImageView)convertView.findViewById(R.id.ig_image_thumb);
 			TextView text = (TextView)convertView.findViewById(R.id.ig_text);
 			Log.i("reid",currentData.get_fullName());
 			text.setText(currentData.get_fullName());
 			Log.i("reid",currentData.get_standardImage());
 			image.setTag(currentData.get_standardImage());
+			thumb.setTag(currentData.get_ownerPicture());
 			new DownloadImagesTask().execute(image);
+			new DownloadImagesTask().execute(thumb);
 		}
 		
 		return convertView;

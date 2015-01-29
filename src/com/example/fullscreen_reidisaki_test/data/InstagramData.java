@@ -1,14 +1,14 @@
 package com.example.fullscreen_reidisaki_test.data;
 
 public class InstagramData {
-	String[] _tags;
-	String _created_time;
-	String _thumbnailImage;
-	String _standardImage;
-	String _ownerName;
-	String _ownerPicture;
-	String _videoUrl;
-	String _fullName;
+	private String[] _tags;
+	private String _created_time;
+	private String _thumbnailImage;
+	private String _standardImage;
+	private String _ownerName;
+	private String _ownerPicture;
+	private String _videoUrl;
+	private String _fullName;
 	
 	public String[] get_tags() {
 		return _tags;
