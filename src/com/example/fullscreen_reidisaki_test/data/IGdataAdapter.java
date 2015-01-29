@@ -1,16 +1,23 @@
 package com.example.fullscreen_reidisaki_test.data;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
-import android.R;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.fullscreen_reidisaki_test.R;
 
 public class IGdataAdapter extends ArrayAdapter<InstagramData> {
 
@@ -33,13 +40,45 @@ public class IGdataAdapter extends ArrayAdapter<InstagramData> {
 		} 
 
 		if(data.size() > 0 ) {
-//			ImageView image = (ImageView)convertView.findViewById(R.id.ig_image);
-//			TextView text = (TextView)convertView.findViewById(R.id.ig_text);
+			ImageView image = (ImageView)convertView.findViewById(R.id.ig_image);
+			TextView text = (TextView)convertView.findViewById(R.id.ig_text);
+			text.setText(data.get(position).get_fullName());
+			image.setTag(data.get(position).get_standardImage());
+			new DownloadImagesTask().execute(image);
 		}
 		
-
-
 		return convertView;
+	}
+	
+	public class DownloadImagesTask extends AsyncTask<ImageView, Void, Bitmap> {
+
+	    ImageView imageView = null;
+
+	    @Override
+	    protected Bitmap doInBackground(ImageView... imageViews) {
+	        this.imageView = imageViews[0];
+	        return download_Image((String)imageView.getTag());
+	    }
+
+	    @Override
+	    protected void onPostExecute(Bitmap result) {
+	        imageView.setImageBitmap(result);
+	    }
+
+	    private Bitmap download_Image(String url) {
+
+	        Bitmap bmp =null;
+	        try{
+	            URL ulrn = new URL(url);
+	            HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
+	            InputStream is = con.getInputStream();
+	            bmp = BitmapFactory.decodeStream(is);
+	            if (null != bmp)
+	                return bmp;
+
+	            }catch(Exception e){}
+	        return bmp;
+	    }
 	}
 }
 
