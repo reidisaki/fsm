@@ -15,6 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,10 +26,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fullscreen_reidisaki_test.api.API;
+import com.example.fullscreen_reidisaki_test.data.IGdataAdapter;
 import com.example.fullscreen_reidisaki_test.data.InstagramData;
 
-public class MainActivity extends Activity {
-
+public class MainActivity extends ListActivity {
+	public IGdataAdapter adapter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,7 +92,12 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(List<InstagramData> result) {
 			super.onPostExecute(result);
-			// store the data in a listview and add a
+			if(adapter != null) {
+				adapter = new IGdataAdapter(getApplicationContext(), R.layout.ig_row, result);
+				setListAdapter(adapter);
+				//update list
+				adapter.notifyDataSetChanged();
+			}
 
 		}
 
