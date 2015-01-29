@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+<string name="admob_id">ca-app-pub-5747146577301976/8656866842</string>
     <string name="app_name">fullscreen-reidisaki-test</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
