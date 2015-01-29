@@ -100,8 +100,12 @@ public class MainActivity extends ListActivity{
 		}
 		@Override
 		protected List<InstagramData> doInBackground(String... params) {
-			return connect(getResources().getString(R.string.instagram_feed)
+			List<InstagramData> list = connect(getResources().getString(R.string.instagram_feed)
 					+ getResources().getString(R.string.instagram_client_id));
+			for(InstagramData d : list) {
+				
+			}
+			return list;
 		}
 
 		@Override

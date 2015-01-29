@@ -6,6 +6,7 @@
 
     <ImageView
         android:id="@+id/ig_image"
+        android:src="@drawable/download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
